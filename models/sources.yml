@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+  - name: dev
+    description: Bike Sharing dataset from UCI
+    tables:
+      - name: raw_bike_data
+        description: Daily bike rental data
+        columns:
+          - name: dteday
+            description: Date
+            tests:
+              - not_null
+              - unique
+          
+          - name: cnt
+            description: Total bike rentals
+            tests:
+              - not_null
+
+models:
+  - name: stg_raw_bike_data
+    description: Cleaned bike data
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
+      
+      - name: total_rentals
+        tests:
+          - not_null
+  
+  - name: fct_daily_metrics
+    description: Daily metrics with rolling averages
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
+      
+      - name: total_rentals
+        tests:
+          - not_null
+  
+  - name: fct_forecasting_features
+    description: Ready-for-ARIMA forecasting table
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
+      
+      - name: revenue
+        description: Target variable (total rentals)
+        tests:
+          - not_null

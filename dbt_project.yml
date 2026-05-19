@@ -1,0 +1,50 @@
+# dbt_project.yml - Bike Sharing Analytics
+name: 'bike_sharing_analytics'
+version: '1.0.0'
+config-version: 2
+
+# BigQuery profile (from profiles.yml)
+profile: 'forecasting_project'
+
+# Project paths
+model-paths: ["models"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model configurations
+models:
+  bike_sharing_analytics:
+    # Staging models
+    staging:
+      +materialized: view
+      tags: ['staging']
+      
+    # Mart (fact/dimension) models
+    marts:
+      +materialized: table
+      tags: ['mart']
+
+# Variables (can be overridden at CLI)
+vars:
+  start_date: '2011-01-01'
+  end_date: '2012-12-31'
+  lookback_days: 730
+  min_observations: 100
+
+# Pre-run hook
+on-run-start: 
+  - "{{ log('🚀 Starting dbt run for Bike Sharing Analytics...', info=true) }}"
+
+# Post-run hook
+on-run-end: 
+  - "{{ log('✅ Finished dbt run! Check target/ for compiled SQL', info=true) }}"
+
+# Require dbt version
+require-dbt-version: [">=1.0.0", "<2.0.0"]

@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+
+  forecasting_pipeline:
+
+    build: .
+
+    container_name: forecasting_pipeline
+
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/keys/gcp-key.json
+
+    volumes:
+      - ./keys:/app/keys
+
+    tty: true
+

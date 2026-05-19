@@ -1,0 +1,11 @@
+pandas
+numpy
+google-cloud-bigquery
+pandas-gbq
+db-dtypes
+statsmodels
+dbt-bigquery
+pyarrow
+dbt-core
+dbt-bigquery
+scikit-learn

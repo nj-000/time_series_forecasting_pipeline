@@ -1,0 +1,13 @@
+forecasting_project:
+  target: dev
+
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: economic-forecast-demo
+      dataset: dev
+      keyfile: /app/keys/gcp-key.json
+      threads: 4
+      timeout_seconds: 300
+      location: US
