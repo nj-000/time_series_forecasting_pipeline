@@ -11,13 +11,8 @@ An end-to-end analytics engineering pipeline for time series forecasting on Goog
 
 - [Project Overview](#project-overview)
 - [Architecture](#architecture)
-- [Quick Start](#quick-start)
-- [Setup Instructions](#setup-instructions)
-- [File Structure](#file-structure)
-- [Usage](#usage)
 - [Key Features](#key-features)
 - [Model Selection](#model-selection)
-- [Deployment](#deployment)
 
 ## 🎯 Project Overview
 
@@ -78,60 +73,6 @@ Synthetic/Real CSV Data
 - `profiles.yml` - dbt connection to BigQuery (contains your project ID)
 - `dbt_project.yml` - dbt project metadata and model configurations
 - `docker-compose.yml` - Docker setup for pipeline containerization
-
-## 🔧 Setup Instructions
-
-### Step 1: GCP Project Setup
-
-```bash
-# Create a new GCP project (or use existing)
-gcloud projects create economic-forecast-demo
-
-# Enable BigQuery API
-gcloud services enable bigquery.googleapis.com
-
-# Create a dataset
-bq mk --dataset --location=US economic-forecast-demo:forecasting_demo
-```
-
-### Step 2: Load Sample Data
-
-```bash
-# Create raw data table
-bq mk --table \
-  economic-forecast-demo:forecasting_demo.raw_bike_data \
-  schema.json
-
-# Load CSV data (replace with your data source)
-bq load \
-  --source_format=CSV \
-  --skip_leading_rows=1 \
-  economic-forecast-demo:forecasting_demo.raw_bike_data \
-  gs://your-bucket/bike_sharing_data.csv \
-  schema.json
-```
-
-### Step 3: Run dbt
-
-```bash
-dbt deps                    # Install dbt packages
-dbt run                     # Run all models
-dbt test                    # Run data tests
-dbt docs generate           # Generate documentation
-dbt docs serve              # View docs locally (http://localhost:8000)
-```
-
-### Step 4: Forecasting
-
-1. Open `ARIMA_Model_Selection_Colab.ipynb` in Google Colab
-2. Update your GCP project ID
-3. Run cells sequentially to:
-   - Load data from BigQuery
-   - Test stationarity (ADF/KPSS tests)
-   - Analyze ACF/PACF patterns
-   - Compare ARIMA models (AIC, BIC, RMSE)
-   - Generate 12-month forecasts
-   - Visualize results with confidence intervals
 
 ## 📊 Key Features
 
@@ -194,30 +135,6 @@ ARIMA(1,1,1)| 45230  | 45262  | 0.892 | 1245.67  | 3.2%
 ARIMA(0,1,1)| 45245  | 45268  | 0.881 | 1289.45  | 3.5%
 ARIMA(2,1,1)| 45238  | 45278  | 0.893 | 1238.92  | 3.1%
 ```
-
-## 🐳 Docker Setup
-
-### Build and Run with Docker
-
-```bash
-# Build the Docker image
-docker-compose build
-
-# Run the pipeline
-docker-compose up forecasting_pipeline
-
-# Run with environment variables
-docker-compose run forecasting_pipeline \
-  -e GOOGLE_APPLICATION_CREDENTIALS=/app/keys/gcp-key.json
-```
-
-### Docker Configuration
-
-The `docker-compose.yml` includes:
-- Python 3.8+ environment
-- dbt and required packages pre-installed
-- Google Cloud authentication via service account
-- Volume mounts for secrets and config
 
 ---
 
